@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+    <style>
+        #container{
+            position: relative;
+            display: table;
+            margin:auto;
+        }
+        #challenge{
+            background-color:black;
+            color:white;
+            margin:auto;
+            padding:25px;
+        }
+        li{
+            margin:5px;
+        }
+    </style>
+    <body>
+        <div id="container">
+            <h1>Close-knit Words</h1>
+            <p>The definition of a "close-knit word", according to some, is a word that contains, in any order, at least one set of three letters that are consecutive in the alphabet. For example, the word "education" is considered a close-knit word because it contains the three letters "c,d,e". Here, I hava written a program, from a challenge I saw on Code-golf Stack Exchange, that determines whether or not an inputted word is a "close-knit word". The challenge and the rules are as stated:</p>
+            <div id="challenge">
+                <p>
+                The challenge is to code-golf a program capable of taking a single word as input (assumed lower case, for all intents and purposes) and to return output that (if available) lists all consecutive letter sets (also in lower case) if it is a close-knit word, and empty output if it is not a close-knit word
+                </p>
+                <h3>Rules</h3>
+                <ul>
+                    <li>Whereas input is to be assumed to be a single lower-case word and output must be lower-case, the nature of the output will vary according to the choice of your coding language. Please select a form of output that will best suit the nature of the challenge, whether it be STDOUT, file output, array, etc.</li>
+                    <li>Because this is code-golf, it will be a case of lowest number of bytes being the clear winner.
+</li>
+                    <li>No silly loopholes.
+</li>
+                    <li>I will not accept answers that have the consecutive letters in non-alphabetical order... So cab will not be deemed a suitable output for cabaret, for example.
+</li>
+                    <li>Special note, while the "triplets" don't necessarily have to be in alphabetical order, but the characters within the triplets must be... so in the case of the word "performance", for example, the output mno,nop will be accepted, as will nop,mno. In the case of the word "hijacking", there are six ways that the triplets of ghi, hij and ijk could be arranged in a list, and all six permutations are acceptable as output.</li>
+                </ul>
+            </div>
+            <p>I know that JS does have an array sort function of its own, but here I wanted to experiment and write my own  insertion sort example, to better understand how it works. I also wanted more practice with nested loops, as I felt I was weak with that as well. As such, my program wouldn't quite be considered "golfable" on Code-golf, since I wasn't going for least amount of code possible. With that, if you catch any errors or any areas where I could streamline, feel free to let me know. Cheers!</p>
+            <input type="text" id="wordEx" name="word1" value="">
+            <button onclick="myFunc()">Test the word</button>
+            <p id="answer"> </p>
+        </div>
+        <script>
+            function myFunc(){
+                var word1=document.getElementById("wordEx").value;
+                var uniVal=[];
+                var newSort=[word1.charCodeAt(0)];
+                var val1, val2;
+                var closeKnit=[];
+
+                for(i=1;i<word1.length;i++){  //populates the array with a letter by letter unicode version 
+                    uniVal.push(word1.charCodeAt(i));
+                }
+                
+                for(i=0;i<uniVal.length;i++){  //insertion sort of the arrays
+                    var j=0;
+                    val1=uniVal[i];
+                    while(val1>newSort[j]){
+                        if(j==newSort.length){
+                            break;
+                        }
+                        j++;
+                    }
+                    newSort.splice(j,0,val1); //creates new array that is in ascending order
+                }
+                
+                for(i=0;i<(newSort.length-2);i++){   //checks if there are 3 consecutive letters within the word, and if so, adds them to a new array
+                    if(((newSort[i]+1)==newSort[i+1])&&((newSort[i]+2)==newSort[i+2])){
+                        closeKnit.push(newSort[i],newSort[i+1],newSort[i+2]);
+                    }
+                }
+                
+                var closeLetters=[];
+                for(i=0;i<closeKnit.length;i++){  //turns the Unicode values back into letters
+                    closeLetters.push(String.fromCharCode(closeKnit[i]));
+                }
+                
+                if(closeKnit.length>0){  //displays whether or not word is close knit, and if so which letters
+                    document.getElementById("answer").innerHTML="The close knit letters in this word are: "+closeLetters;
+                }
+                else{
+                    document.getElementById("answer").innerHTML="The word is not a close knit word.";
+                }
+            }
+        </script>
+    </body>
+</html>
